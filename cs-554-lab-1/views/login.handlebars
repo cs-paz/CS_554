@@ -1,0 +1,21 @@
+<div>
+    {{#if error}}
+        <div id="error"><p>{{error}}</p></div>
+    {{/if}}
+
+    <h1>Login</h1>
+
+    <form id="login-form" action="/login" method="POST">
+        <label>
+            Username
+          <input type="text" name="username" id="username"></textarea>
+        </label>
+        <label class="formLabel">
+            Password
+          <input type="text" name="password" id="password"></textarea>
+        </label>
+        <button type="submit" id="submit">Submit</button>
+    </form>
+
+    <a href="/signup">Need to register? Click here to sign-up</a>
+</div>
