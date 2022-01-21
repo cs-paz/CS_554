@@ -1,4 +1,4 @@
-const { blog, user } = require("../config/mongoCollections");
+const { user } = require("../config/mongoCollections");
 const connection = require("../config/mongoConnection");
 const ObjectID = require("mongodb").ObjectID;
 const bcrypt = require("bcrypt");
@@ -11,7 +11,7 @@ const closeDB = async () => {
 
 const validation = (username, name, password) => {
   if (!username || !password || !name) {
-    throw new Error("Both username and password must be supplied.");
+    throw new Error("Username, name, and password must be supplied.");
   }
 
   if (
@@ -36,33 +36,32 @@ const validation = (username, name, password) => {
   }
 };
 
-const createUser = async (username, name, password) => {
+const createUser = async ({ username, name, password }) => {
   validation(username, name, password);
 
+  const userCollection = await user();
   const lowerCasedUsername = username.toLowerCase();
 
-  bcrypt.hash(password, saltRounds, async (err, hash) => {
-    if (err) {
-      throw new Error("Error creating hash.");
-    }
+  const hash = await bcrypt.hash(password, saltRounds);
 
-    const newUser = {
-      username: lowerCasedUsername,
-      password: hash,
-    };
+  const newUser = {
+    username: lowerCasedUsername,
+    name,
+    password: hash,
+  };
 
-    const userCollection = await user();
-    const insertInfo = await userCollection.insertOne(newUser);
+  const insertInfo = await userCollection.insertOne(newUser);
 
-    if (insertInfo.insertedCount === 0) {
-      throw new Error("Unable to add new user.");
-    }
-  });
+  if (insertInfo.insertedCount === 0) {
+    throw new Error("Unable to add new user.");
+  }
 
-  return { user: getUser(lowerCasedUsername) };
+  const _user = await userCollection.findOne({ username: lowerCasedUsername });
+
+  return { user: _user };
 };
 
-const checkUser = async (username, password) => {
+const checkUser = async ({ username, password }) => {
   if (!username || !password) {
     throw new Error("Both username and password must be supplied.");
   }
@@ -73,9 +72,9 @@ const checkUser = async (username, password) => {
   const lowerCasedUsername = username.toLowerCase();
 
   const userCollection = await user();
-  const user = await userCollection.findOne({ username: lowerCasedUsername });
+  const _user = await userCollection.findOne({ username: lowerCasedUsername });
 
-  hash = user.password;
+  const hash = _user.password;
 
   const passwordMatches = await bcrypt.compare(password, hash);
 
@@ -86,13 +85,30 @@ const checkUser = async (username, password) => {
   return { authenticated: true };
 };
 
-const getUser = async (username) => {
+const getUserByUsername = async (username) => {
   const userCollection = await user();
-  const user = await userCollection.findOne({ username: username });
-  return user;
+  const _user = await userCollection.findOne({ username: username });
+  return _user;
 };
+
+const getUser = async ({ id }) => {
+  const userCollection = await user();
+  const _user = await userCollection.findOne({ _id: new ObjectID(id) });
+  return _user;
+};
+
+const main = async () => {
+  // console.log(await createUser("cszablewskipaz", "Christian Paz", "password"));
+  // // console.log(await createUser("scruncherz", "Mateo Paz", "pwd123"));
+  // // console.log(await createUser("robloxguy", "Steven Paz", "omgroblox123"));
+  // console.log(await checkUser("cszablewskipaz", "password"));
+};
+
+main();
 
 module.exports = {
   createUser,
   checkUser,
+  getUserByUsername,
+  getUser,
 };
