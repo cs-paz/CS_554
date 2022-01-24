@@ -1,13 +1,17 @@
 const express = require("express");
 const router = express.Router();
-const { checkUser } = require("../data/user");
+const { checkUser, getUserByUsername } = require("../data/user");
 
 router.post("/", async (req, res) => {
   const { username, password } = req.body;
 
   try {
     const authenticated = await checkUser({ username, password });
-    req.session.user = { username: username.toLowerCase() };
+    const userDetails = await getUserByUsername({
+      username: username.toLowerCase(),
+    });
+    req.session.user = userDetails;
+
     if (authenticated) {
       res.status(200).json(authenticated);
     } else {

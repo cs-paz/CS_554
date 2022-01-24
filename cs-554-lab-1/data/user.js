@@ -85,9 +85,9 @@ const checkUser = async ({ username, password }) => {
   return { authenticated: true };
 };
 
-const getUserByUsername = async (username) => {
+const getUserByUsername = async ({ username }) => {
   const userCollection = await user();
-  const _user = await userCollection.findOne({ username: username });
+  const _user = await userCollection.findOne({ username });
   return _user;
 };
 

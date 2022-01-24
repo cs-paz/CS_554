@@ -6,6 +6,8 @@ const ObjectID = require("mongodb").ObjectID;
 
 // POST
 const addComment = async ({ blogId, userId, comment }) => {
+  console.log(blogId, userId, comment);
+
   if (!blogId || !userId || !comment) {
     throw new Error("BlogId, userId, and comment must be supplied.");
   }
@@ -66,13 +68,13 @@ const deleteComment = async ({ blogId, commentId }) => {
 };
 
 const main = async () => {
-  //     console.log(
-  //       await addComment({
-  //         blogId: "61e9f5b8671f10eada699c7e",
-  //         userId: "61e9f2dab334e625851b9dba",
-  //         comment: "This is a comment",
-  //       })
-  //     );
+  // console.log(
+  //   await addComment({
+  //     blogId: "61ee1e14cb0a45f0444797e5",
+  //     userId: "61e9f2dab334e625851b9dba",
+  //     comment: "This is a comment",
+  //   })
+  // );
   //   console.log(
   //     await deleteComment({
   //       blogId: "61e9f5b8671f10eada699c7e",
@@ -82,3 +84,8 @@ const main = async () => {
 };
 
 main();
+
+module.exports = {
+  addComment,
+  deleteComment,
+};

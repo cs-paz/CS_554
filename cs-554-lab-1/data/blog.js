@@ -45,7 +45,7 @@ const getBlog = async ({ id }) => {
 const createBlog = async ({ title, body, username }) => {
   validation(title, body);
 
-  const _user = await getUserByUsername(username);
+  const _user = await getUserByUsername({ username });
 
   const blogCollection = await blog();
   const newBlog = {
