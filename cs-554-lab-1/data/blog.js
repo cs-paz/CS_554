@@ -46,13 +46,12 @@ const createBlog = async ({ title, body, username }) => {
   validation(title, body);
 
   const _user = await getUserByUsername(username);
-  console.log(_user);
 
   const blogCollection = await blog();
   const newBlog = {
     title,
     body,
-    userThatPosted: { _id: new ObjectID(), _user: username },
+    userThatPosted: { _id: new ObjectID(), username: _user.username },
     comments: [],
   };
 

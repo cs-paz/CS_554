@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-const { createUser } = require("../data/blog");
+const { createUser } = require("../data/user");
 
 router.post("/", async (req, res) => {
   const { username, name, password } = req.body;
   try {
-    const { user } = await createUser(username, name, password);
+    const { user } = await createUser({ username, name, password });
     if (user) {
       res.status(200).json(user);
     } else {
