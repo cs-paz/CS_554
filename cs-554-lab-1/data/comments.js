@@ -6,8 +6,6 @@ const ObjectID = require("mongodb").ObjectID;
 
 // POST
 const addComment = async ({ blogId, userId, comment }) => {
-  console.log(blogId, userId, comment);
-
   if (!blogId || !userId || !comment) {
     throw new Error("BlogId, userId, and comment must be supplied.");
   }

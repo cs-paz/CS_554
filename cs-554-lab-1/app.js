@@ -12,22 +12,22 @@ app.use(
     secret: "This is a secret.. shhh don't tell anyone",
     saveUninitialized: true,
     resave: false,
-    cookie: { maxAge: 60000 },
+    cookie: { maxAge: 600000 },
   })
 );
 
 app.use(express.urlencoded({ extended: true }));
 
-// const logger = (req, res, next) => {
-//   console.log(
-//     `[${new Date().toUTCString()}] ${req.method} ${req.originalUrl} ${
-//       req.session.user ? "(Authenticated User)" : "(Non-Authenticated User)"
-//     }`
-//   );
-//   next();
-// };
+const logger = (req, res, next) => {
+  console.log(
+    `[${new Date().toUTCString()}] ${req.method} ${req.originalUrl} ${
+      req.session.user ? "(Authenticated User)" : "(Non-Authenticated User)"
+    }`
+  );
+  next();
+};
 
-// app.use(logger);
+app.use(logger);
 
 configRoutes(app);
 

@@ -9,15 +9,9 @@ const {
 } = require("../data/blog");
 
 router.get("/", async (req, res) => {
-  const skip = req.query.skip;
+  const { skip, take } = req.query;
   try {
-    if (!req.session.user) {
-      res
-        .status(401)
-        .json({ error: "You must be logged in to view this page." });
-    }
-
-    const blogs = await getAllBlogs({ skip });
+    const blogs = await getAllBlogs({ skip, take });
     if (blogs) {
       res.status(200).json(blogs);
     } else {
@@ -31,12 +25,6 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    if (!req.session.user) {
-      res
-        .status(401)
-        .json({ error: "You must be logged in to view this page." });
-    }
-
     const blog = await getBlog({ id });
     if (blog) {
       res.status(200).json(blog);

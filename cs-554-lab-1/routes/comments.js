@@ -50,10 +50,14 @@ router.delete("/:blogId/comments/:commentId", async (req, res) => {
       res.status(404).json({ error: "No blog found" });
     }
 
-    if (req.session.user.username !== oldBlog.userThatPosted.username) {
+    const comment = oldBlog.comments.find(
+      (comment) => comment._id.toString() === commentId
+    );
+
+    if (req.session.user.username !== comment.username) {
       res
         .status(401)
-        .json({ error: "You are not authorized to edit this blog" });
+        .json({ error: "You are not authorized to edit this comment" });
     }
 
     const commentObj = await deleteComment({

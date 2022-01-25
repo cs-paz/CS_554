@@ -20,13 +20,22 @@ const validation = (title, body) => {
 };
 
 // GET
-const getAllBlogs = async ({ skip }) => {
+const getAllBlogs = async ({ skip, take }) => {
+  if (
+    (skip && typeof skip !== "number") ||
+    (take && typeof take !== "number")
+  ) {
+    throw new Error("Invalid type.");
+  }
+  if (skip < 0 || take < 0) {
+    throw new Error("Invalid value.");
+  }
   const blogCollection = await blog();
   const allBlogs = await blogCollection.find({}).toArray();
-  if (skip > 0) {
-    return allBlogs.slice(skip);
-  }
-  return allBlogs;
+  const skippedBlogs = skip > 0 ? allBlogs.slice(skip) : allBlogs;
+  const takenBlogs =
+    take > 0 ? skippedBlogs.slice(0, take) : skippedBlogs.slice(0, 20);
+  return takenBlogs;
 };
 
 // GET

@@ -10,6 +10,8 @@ router.post("/", async (req, res) => {
     const userDetails = await getUserByUsername({
       username: username.toLowerCase(),
     });
+
+    delete userDetails.password;
     req.session.user = userDetails;
 
     if (authenticated) {
