@@ -6,13 +6,6 @@ const blogRoute = require("./blog");
 const commentsRoute = require("./comments");
 
 const constructorMethod = (app) => {
-  app.get("/", (req, res) => {
-    if (!req.session.user) {
-      res
-        .status(401)
-        .json({ error: "You must be logged in to view this page." });
-    }
-  });
   app.use("/blog/logout", logoutRoute);
   app.use("/blog", commentsRoute);
   app.use("/blog", blogRoute);

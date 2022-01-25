@@ -19,16 +19,26 @@ const validation = (title, body) => {
   }
 };
 
+const isAPositiveNumber = (char) => {
+  return (
+    char === "1" ||
+    char === "2" ||
+    char === "3" ||
+    char === "4" ||
+    char === "5" ||
+    char === "6" ||
+    char === "7" ||
+    char === "8" ||
+    char === "9"
+  );
+};
 // GET
 const getAllBlogs = async ({ skip, take }) => {
   if (
-    (skip && typeof skip !== "number") ||
-    (take && typeof take !== "number")
+    !(skip && isAPositiveNumber(skip)) ||
+    !(take && isAPositiveNumber(take))
   ) {
     throw new Error("Invalid type.");
-  }
-  if (skip < 0 || take < 0) {
-    throw new Error("Invalid value.");
   }
   const blogCollection = await blog();
   const allBlogs = await blogCollection.find({}).toArray();
