@@ -23,8 +23,11 @@ app.use(express.urlencoded({ extended: true }));
 // };
 
 // app.use(logger);
+app.get("/api/people/history", async (req, res, next) => {
+  next();
+});
 
-app.get("/:id", async (req, res, next) => {
+app.get("/api/people/:id", async (req, res, next) => {
   const { id } = req.params;
   const people = await client.getAsync("people");
   if (!people) {
