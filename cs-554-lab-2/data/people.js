@@ -11,7 +11,6 @@ getById = (id) => {
       if (!people) {
         reject(new Error("API request failed."));
       }
-      console.log(people);
       const person = people.find((person) => parsedId === person.id);
       if (person) {
         resolve(person);

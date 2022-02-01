@@ -9,9 +9,9 @@ bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
 router.get("/", async (req, res) => {
-  const people = await client.getAsync("people");
+  const people = await client.getAsync("peopleHistory");
   if (!people) {
-    res.status(404).json({ error: "No people found in the cache." });
+    res.status(200).json([]);
     return;
   }
   res.status(200).json(JSON.parse(people));

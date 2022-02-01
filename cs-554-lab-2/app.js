@@ -29,9 +29,10 @@ app.get("/api/people/history", async (req, res, next) => {
 
 app.get("/api/people/:id", async (req, res, next) => {
   const { id } = req.params;
-  const people = await client.getAsync("people");
+  const people = await client.getAsync("peopleCache");
   if (!people) {
     next();
+    return;
   }
   const person = JSON.parse(people).find((person) => id === person.id);
   if (person) {
