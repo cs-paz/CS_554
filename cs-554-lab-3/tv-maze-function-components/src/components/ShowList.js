@@ -49,7 +49,9 @@ const ShowList = () => {
   const [searchData, setSearchData] = useState(undefined);
   const [showsData, setShowsData] = useState(undefined);
   const [searchTerm, setSearchTerm] = useState("");
+  const [dataEnding, setDataEnding] = useState(false);
   const { pageNum } = useParams();
+  const parsedPageNum = parseInt(pageNum);
   let card = null;
 
   useEffect(() => {
@@ -63,6 +65,20 @@ const ShowList = () => {
         setLoading(false);
       } catch (e) {
         console.log(e);
+      }
+    }
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    console.log("on load useeffect");
+    async function fetchData() {
+      try {
+        const { data } = await axios.get(
+          `http://api.tvmaze.com/shows?page=${parsedPageNum + 1}`
+        );
+      } catch (e) {
+        setDataEnding(true);
       }
     }
     fetchData();
@@ -155,6 +171,18 @@ const ShowList = () => {
   } else {
     return (
       <div>
+        {parsedPageNum > 0 && (
+          <a
+            style={{
+              marginRight: 15,
+              marginBottom: 25,
+            }}
+            href={`/shows/page/${parsedPageNum - 1}`}
+          >
+            Previous
+          </a>
+        )}
+        {!dataEnding && <a href={`/shows/page/${parsedPageNum + 1}`}>Next</a>}
         <SearchShows searchValue={searchValue} />
         <br />
         <br />
