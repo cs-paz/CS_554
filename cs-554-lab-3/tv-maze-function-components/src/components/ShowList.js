@@ -61,6 +61,7 @@ const ShowList = () => {
         const { data } = await axios.get(
           `http://api.tvmaze.com/shows?page=${pageNum}`
         );
+        console.log(data.length);
         setShowsData(data);
         setLoading(false);
       } catch (e) {
@@ -171,18 +172,20 @@ const ShowList = () => {
   } else {
     return (
       <div>
-        {parsedPageNum > 0 && (
-          <a
-            style={{
-              marginRight: 15,
-              marginBottom: 25,
-            }}
-            href={`/shows/page/${parsedPageNum - 1}`}
-          >
-            Previous
-          </a>
-        )}
-        {!dataEnding && <a href={`/shows/page/${parsedPageNum + 1}`}>Next</a>}
+        <div style={{ marginBottom: 20 }}>
+          {parsedPageNum > 0 && (
+            <a
+              style={{
+                marginRight: 15,
+                marginBottom: 25,
+              }}
+              href={`/shows/page/${parsedPageNum - 1}`}
+            >
+              Previous
+            </a>
+          )}
+          {!dataEnding && <a href={`/shows/page/${parsedPageNum + 1}`}>Next</a>}
+        </div>
         <SearchShows searchValue={searchValue} />
         <br />
         <br />
