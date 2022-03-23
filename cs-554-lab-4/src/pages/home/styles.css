@@ -1,0 +1,24 @@
+.main {
+  margin: auto;
+  width: 65%;
+  background-color: #d5f7cb;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 0 15px 20px 15px;
+}
+
+.headerContainer {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
+
+.captionContainer {
+  text-align: center;
+}
+
+.linksContainer {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 50px;
+}
