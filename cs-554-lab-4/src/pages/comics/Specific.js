@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import urls from "../../env";
 import List from "../../components/List";
@@ -9,17 +9,22 @@ const SpecificComic = () => {
   const [comic, setComic] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
 
+  const navigate = useNavigate();
+
   useEffect(async () => {
-    const response = await axios.get(urls.specificComic(id));
-    console.log(response);
-    setComic(response.data.data.results[0]);
-    setIsLoaded(true);
-  }, []);
+    try {
+      const response = await axios.get(urls.specificComic(id));
+      setComic(response.data.data.results[0]);
+      setIsLoaded(true);
+    } catch (e) {
+      navigate("/404");
+    }
+  }, [id]);
 
   let key = 0;
   let prices = null;
 
-  if (comic.prices.length > 0) {
+  if (comic?.prices?.length > 0) {
     prices = comic.prices.map((price) => {
       key++;
       return (
@@ -35,19 +40,36 @@ const SpecificComic = () => {
   return (
     <>
       {isLoaded ? (
-        <div>
+        <div className="main content">
           <h1>{comic.title}</h1>
-          {comic.digitalId && <p>Digital ID: {comic.digitalId}</p>}
-          {comic.issueNumber && <p>Issue Number: {comic.issueNumber}</p>}
-          {comic.description && <p>Description: {comic.description}</p>}
-          {comic.variantDescription && (
+          <div>
+            <img
+              src={`${comic.thumbnail.path}.${comic.thumbnail.extension}${urls.creds}`}
+              width="200"
+              alt={`${comic.title} image`}
+            />
+          </div>
+          {(comic.description ||
+            comic.modified ||
+            comic.digitalId ||
+            comic.issueNumber ||
+            comic.variantDescription ||
+            comic.isbn ||
+            comic.upc ||
+            comic.format ||
+            comic.pageCount) && <h2>General Information</h2>}
+
+          {comic.digitalId ? <p>Digital ID: {comic.digitalId}</p> : null}
+          {comic.issueNumber ? <p>Issue Number: {comic.issueNumber}</p> : null}
+          {comic.description ? <p>Description: {comic.description}</p> : null}
+          {comic.variantDescription ? (
             <p>Variant Description: {comic.variantDescription}</p>
-          )}
+          ) : null}
           {comic.modified && <p>Modified: {comic.modified}</p>}
-          {comic.isbn && <p>ISBN: {comic.isbn}</p>}
-          {comic.upc && <p>UPC: {comic.upc}</p>}
-          {comic.format && <p>Format: {comic.format}</p>}
-          {comic.pageCount && <p>Page Count: {comic.pageCount}</p>}
+          {comic.isbn ? <p>ISBN: {comic.isbn}</p> : null}
+          {comic.upc ? <p>UPC: {comic.upc}</p> : null}
+          {comic.format ? <p>Format: {comic.format}</p> : null}
+          {comic.pageCount ? <p>Page Count: {comic.pageCount}</p> : null}
           <div>
             {comic?.characters?.available > 0 && (
               <List name="Characters" list={comic.characters.items} />
@@ -56,7 +78,11 @@ const SpecificComic = () => {
               <List name="Series" list={[comic.series]} />
             )}
             {comic?.stories?.available > 0 && (
-              <List name="Stories" list={comic.stories.items} />
+              <List
+                name="Stories"
+                list={comic.stories.items}
+                isLinked={false}
+              />
             )}
             {comic?.creators?.available > 0 && (
               <List

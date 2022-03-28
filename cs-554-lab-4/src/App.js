@@ -9,6 +9,8 @@ import Comics from "./pages/comics/Comics";
 import SpecificComic from "./pages/comics/Specific";
 import Series from "./pages/series/Series";
 import SpecificSeries from "./pages/series/Specific";
+import NotFound from "./pages/NotFound";
+
 function App() {
   return (
     <div>
@@ -20,6 +22,8 @@ function App() {
         <Route path="/comics/:id" element={<SpecificComic />} />
         <Route path="/series/page/:page" element={<Series />} />
         <Route path="/series/:id" element={<SpecificSeries />} />
+        <Route path="/404" element={<NotFound />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </div>
   );

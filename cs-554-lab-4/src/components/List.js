@@ -2,6 +2,7 @@ import axios from "axios";
 import { Link, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import urls from "../env";
+import styles from "./styles.css";
 
 let key = 0;
 
@@ -29,7 +30,7 @@ const List = ({ name, list, isLinked = true }) => {
   ));
 
   return (
-    <div>
+    <div className="contentList">
       <h2>{name}</h2>
       {_list}
     </div>
