@@ -14,7 +14,7 @@ const isBinnedImage = (binnedImages, unsplashImage) => {
     return false;
   }
   const binnedImage = binnedImages.find(
-    (image) => image.id === unsplashImage.id
+    (image) => image.id === unsplashImage.id && image.binned
   );
   return binnedImage ? true : false;
 };
@@ -93,9 +93,9 @@ const Home = () => {
           </div>
           {data.unsplashImages.map((image) => (
             <div key={image.id}>
+              {image.description && <p>{image.description}</p>}
+              {image.posterName && <p>an image by: {image.posterName}</p>}
               <img src={image.url} alt={image.posterName} width={600} />
-              {image.posterName && <p>Poster Name: {image.posterName}</p>}
-              {image.description && <p>Description: {image.description}</p>}
               <div
                 style={{
                   height: "50px",

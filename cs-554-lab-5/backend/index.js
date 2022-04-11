@@ -72,7 +72,7 @@ const updatePostInRedisDB = async ({ post, db, name }) => {
 const deletePostFromRedisDB = async ({ id, db, name }) => {
   const _db = JSON.parse(db);
   const index = _db.findIndex((p) => p.id === id);
-  const post = _db.splice(index, 1);
+  const post = _db.splice(index, 1)[0];
   await client.setAsync(name, JSON.stringify(_db));
   return post;
 };
@@ -117,7 +117,7 @@ const resolvers = {
         posterName: args.posterName,
         description: args.description,
         userPosted: true,
-        binned: true,
+        binned: false,
       };
       await addPostToRedisDB({
         post,
@@ -147,7 +147,7 @@ const resolvers = {
         if (args.userPosted !== post.userPosted) {
           post.userPosted = args.userPosted;
         }
-        if (args.binned !== post.binned) {
+        if (args.binned !== post.binned && !post.userPosted) {
           post.binned = args.binned;
           console.log("removing post from bin");
           if (!args.binned) {
@@ -158,6 +158,9 @@ const resolvers = {
             });
             return post;
           }
+        }
+        if (args.binned !== post.binned && post.userPosted) {
+          post.binned = args.binned;
         }
         await updatePostInRedisDB({
           post,
@@ -186,11 +189,12 @@ const resolvers = {
     },
     deleteImage: async (parent, args) => {
       const binnedImages = await client.getAsync("binnedImages");
-      return await deletePostFromRedisDB({
+      const post = await deletePostFromRedisDB({
         id: args.id,
         db: binnedImages,
         name: "binnedImages",
       });
+      return post;
     },
   },
 };

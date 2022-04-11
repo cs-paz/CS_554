@@ -40,35 +40,37 @@ const MyBin = () => {
     <div>
       {readyToRender ? (
         <>
-          {binData.binnedImages.map((image) => (
-            <div key={image.id}>
-              <img src={image.url} alt={image.posterName} width={600} />
-              {image.posterName && <p>Poster Name: {image.posterName}</p>}
-              {image.description && <p>Description: {image.description}</p>}
-              <div
-                style={{
-                  height: "50px",
-                  width: "150px",
-                  backgroundColor: "lightgrey",
-                  marginBottom: 40,
-                  border: "1px solid black",
-                  borderRadius: "8px",
-                }}
-                onClick={() => {
-                  setUpdateBin({
-                    id: image.id,
-                    url: image.url,
-                    posterName: image.posterName,
-                    description: image.description,
-                    userPosted: image.userPosted,
-                    binned: false,
-                  });
-                }}
-              >
-                <p>Remove from Bin</p>
+          {binData.binnedImages
+            .filter((_image) => _image.binned)
+            .map((image) => (
+              <div key={image.id}>
+                {image.description && <p>Description: {image.description}</p>}
+                {image.posterName && <p>an image by: {image.posterName}</p>}
+                <img src={image.url} alt={image.posterName} width={600} />
+                <div
+                  style={{
+                    height: "50px",
+                    width: "150px",
+                    backgroundColor: "lightgrey",
+                    marginBottom: 40,
+                    border: "1px solid black",
+                    borderRadius: "8px",
+                  }}
+                  onClick={() => {
+                    setUpdateBin({
+                      id: image.id,
+                      url: image.url,
+                      posterName: image.posterName,
+                      description: image.description,
+                      userPosted: image.userPosted,
+                      binned: !image.binned,
+                    });
+                  }}
+                >
+                  <p>Remove from Bin</p>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </>
       ) : (
         <h1>Loading...</h1>

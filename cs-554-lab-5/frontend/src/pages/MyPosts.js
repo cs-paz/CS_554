@@ -1,7 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { useQuery, useMutation } from "@apollo/client";
-import { GET_BINNED_IMAGES, UPDATE_IMAGE_POST } from "../queries";
+import {
+  GET_BINNED_IMAGES,
+  UPDATE_IMAGE_POST,
+  DELETE_IMAGE_POST,
+} from "../queries";
 import NewPost from "./NewPost";
+
+const isBinnedImage = (binnedImages, unsplashImage) => {
+  if (!binnedImages) {
+    return false;
+  }
+  if (binnedImages?.length === 0) {
+    return false;
+  }
+  const binnedImage = binnedImages.find(
+    (image) => image.id === unsplashImage.id && image.binned
+  );
+  return binnedImage ? true : false;
+};
 
 const MyPosts = () => {
   const {
@@ -14,7 +31,9 @@ const MyPosts = () => {
   });
 
   const [updateImagePost] = useMutation(UPDATE_IMAGE_POST);
+  const [deleteImagePost] = useMutation(DELETE_IMAGE_POST);
   const [updateBin, setUpdateBin] = useState({});
+  const [deleteBinElement, setDeleteBinElement] = useState({});
   const [newPost, setNewPost] = useState(false);
   const [displayForm, setDisplayForm] = useState(false);
 
@@ -37,6 +56,16 @@ const MyPosts = () => {
     }
     binRefetch();
   }, [updateBin]);
+
+  useEffect(() => {
+    if (deleteBinElement.id) {
+      console.log(deleteBinElement.id);
+      const variables = { id: deleteBinElement.id };
+      console.log(deleteImagePost({ variables }));
+      setDeleteBinElement({});
+    }
+    binRefetch();
+  }, [deleteBinElement]);
 
   useEffect(() => {
     if (newPost) {
@@ -89,30 +118,58 @@ const MyPosts = () => {
             .filter((_image) => _image.userPosted)
             .map((image) => (
               <div key={image.id}>
-                <img src={image.url} alt={image.posterName} width={600} />
-                {image.posterName && <p>Poster Name: {image.posterName}</p>}
                 {image.description && <p>Description: {image.description}</p>}
-                <div
-                  style={{
-                    height: "50px",
-                    width: "150px",
-                    backgroundColor: "lightgrey",
-                    marginBottom: 40,
-                    border: "1px solid black",
-                    borderRadius: "8px",
-                  }}
-                  onClick={() => {
-                    setUpdateBin({
-                      id: image.id,
-                      url: image.url,
-                      posterName: image.posterName,
-                      description: image.description,
-                      userPosted: image.userPosted,
-                      binned: false,
-                    });
-                  }}
-                >
-                  <p>Remove from Bin</p>
+                {image.posterName && <p>an image by: {image.posterName}</p>}
+                <img src={image.url} alt={image.posterName} width={600} />
+                <div style={{ display: "flex", alignItems: "space-around" }}>
+                  <div
+                    style={{
+                      height: "50px",
+                      width: "150px",
+                      backgroundColor: "lightgrey",
+                      marginBottom: 40,
+                      border: "1px solid black",
+                      borderRadius: "8px",
+                    }}
+                    onClick={() => {
+                      setUpdateBin({
+                        id: image.id,
+                        url: image.url,
+                        posterName: image.posterName,
+                        description: image.description,
+                        userPosted: image.userPosted,
+                        binned: !isBinnedImage(binData?.binnedImages, image),
+                      });
+                    }}
+                  >
+                    {!isBinnedImage(binData?.binnedImages, image) ? (
+                      <p>Add to Bin</p>
+                    ) : (
+                      <p>Remove from Bin</p>
+                    )}
+                  </div>
+                  <div
+                    style={{
+                      height: "50px",
+                      width: "150px",
+                      backgroundColor: "lightgrey",
+                      marginBottom: 40,
+                      border: "1px solid black",
+                      borderRadius: "8px",
+                    }}
+                    onClick={() => {
+                      setDeleteBinElement({
+                        id: image.id,
+                        url: image.url,
+                        posterName: image.posterName,
+                        description: image.description,
+                        userPosted: image.userPosted,
+                        binned: false,
+                      });
+                    }}
+                  >
+                    <p>Delete Post</p>
+                  </div>
                 </div>
               </div>
             ))}
