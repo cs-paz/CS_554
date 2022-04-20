@@ -1,0 +1,53 @@
+.main {
+  margin: auto;
+  width: 80%;
+  background-color: #d5f7cb;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 10px 15px 20px 15px;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.listElem {
+  flex: 0 0 20%;
+  margin-bottom: 20px;
+}
+
+.headerContainer {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin: auto;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.button {
+  padding: 10px;
+  border: 2px solid grey;
+  border-radius: 5px;
+  padding: 0px 10px;
+}
+
+.button > p {
+  text-decoration: none;
+  color: black;
+}
+
+.button:hover {
+  background-color: grey;
+  border: 2px solid grey;
+}
+
+.content {
+  text-align: center;
+}
