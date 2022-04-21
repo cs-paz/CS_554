@@ -95,7 +95,7 @@ router.get("/:id", async (req, res) => {
       types,
       height,
       weight,
-      sprites,
+      image: sprites.front_default,
     };
     const newCache = [
       ...parsedCache,

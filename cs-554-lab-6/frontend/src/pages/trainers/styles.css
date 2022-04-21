@@ -7,18 +7,24 @@
   padding: 10px 15px 20px 15px;
 }
 
-.list {
-  display: flex;
-  flex-wrap: wrap;
-  text-align: center;
-}
-
-.listElem {
-  flex: 0 0 24%;
+.trainer {
   margin-bottom: 20px;
   margin-right: 5px;
   border: 1px solid grey;
   border-radius: 8px;
+  text-align: center;
+}
+
+.trainersPokemon {
+  margin: auto;
+  margin-bottom: 10px;
+  width: 50%;
+  text-align: center;
+  border: 1px solid grey;
+  border-radius: 8px;
+}
+.trainersPokemon:hover {
+  background-color: #f0f0f0;
 }
 
 .listElem:hover {
