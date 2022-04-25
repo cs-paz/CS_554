@@ -13,6 +13,7 @@ const Pokemon = () => {
   const navigate = useNavigate();
   const trainers = useSelector((state) => state);
   const selectedTrainer = trainers.find((t) => t.isSelected);
+  const isFull = selectedTrainer.pokemon.length >= 6;
 
   useEffect(async () => {
     try {
@@ -40,16 +41,20 @@ const Pokemon = () => {
         {!selectedTrainer.pokemon.find(
           (pokemon) => pokemon.pokemonName === p.name
         ) ? (
-          <button
-            onClick={() => {
-              dispatch({
-                type: "ADD_POKEMON",
-                payload: { pokemonName: p.name, image: p.image },
-              });
-            }}
-          >
-            Catch
-          </button>
+          <>
+            {!isFull && (
+              <button
+                onClick={() => {
+                  dispatch({
+                    type: "ADD_POKEMON",
+                    payload: { pokemonName: p.name, image: p.image },
+                  });
+                }}
+              >
+                Catch
+              </button>
+            )}
+          </>
         ) : (
           <button
             onClick={() => {
@@ -83,11 +88,13 @@ const Pokemon = () => {
               </div>
             </Link>
           )}
-          <Link to={`/pokemon/page/${parseInt(page) + 1}`}>
-            <div className="button">
-              <p>Next</p>
-            </div>
-          </Link>
+          {parseInt(page) < 56 && (
+            <Link to={`/pokemon/page/${parseInt(page) + 1}`}>
+              <div className="button">
+                <p>Next</p>
+              </div>
+            </Link>
+          )}
         </div>
       </div>
       <div className="list">{listOfPokemon}</div>

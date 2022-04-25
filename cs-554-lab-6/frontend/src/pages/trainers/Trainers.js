@@ -18,10 +18,12 @@ const Trainers = () => {
   const listOfPokemon = (trainer) => {
     return trainer.pokemon.map((p) => (
       <div key={p.pokemonName} className="trainersPokemon">
-        <div>
-          <p>{p.pokemonName}</p>
-          <img src={p.image} width="100" alt="pokemon image" />
-        </div>
+        <Link to={`/pokemon/${p.pokemonName}`}>
+          <div>
+            <p>{p.pokemonName}</p>
+            <img src={p.image} width="100" alt="pokemon image" />
+          </div>
+        </Link>
       </div>
     ));
   };

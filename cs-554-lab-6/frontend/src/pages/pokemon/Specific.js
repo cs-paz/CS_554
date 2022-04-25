@@ -11,6 +11,9 @@ const Specific = () => {
   const [isLoaded, setIsLoaded] = useState(false);
   const trainers = useSelector((state) => state);
   const selectedTrainer = trainers.find((t) => t.isSelected);
+  const isFull = selectedTrainer.pokemon.length >= 6;
+
+  console.log(trainers);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -43,16 +46,23 @@ const Specific = () => {
           {!selectedTrainer.pokemon.find(
             (p) => p.pokemonName === pokemon.name
           ) ? (
-            <button
-              onClick={() => {
-                dispatch({
-                  type: "ADD_POKEMON",
-                  payload: { pokemonName: pokemon.name, image: pokemon.image },
-                });
-              }}
-            >
-              Catch
-            </button>
+            <>
+              {!isFull && (
+                <button
+                  onClick={() => {
+                    dispatch({
+                      type: "ADD_POKEMON",
+                      payload: {
+                        pokemonName: pokemon.name,
+                        image: pokemon.image,
+                      },
+                    });
+                  }}
+                >
+                  Catch
+                </button>
+              )}
+            </>
           ) : (
             <button
               onClick={() => {
